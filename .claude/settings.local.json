@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(mv:*)",
+      "Bash(ln:*)",
+      "Bash(mkdir:*)",
+      "Bash(rm:*)"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "laravel-boost",
+    "laravel-toolbar",
+    "playwright"
+  ]
+}

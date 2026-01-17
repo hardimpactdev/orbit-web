@@ -1,0 +1,13 @@
+{
+    "plugins": {
+        "marketplace": "hardimpactdev/claude-plugins",
+        "installed": [
+            "craft-laravel",
+            "craft-ui",
+            "php-quality",
+            "git-workflow",
+            "dev-environment",
+            "craft-scaffold"
+        ]
+    }
+}

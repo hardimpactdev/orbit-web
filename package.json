@@ -1,0 +1,47 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "build:ssr": "vite build && vite build --ssr",
+        "dev": "vite",
+        "format": "oxfmt resources/",
+        "format:check": "oxfmt --check resources/",
+        "oxlint": "bunx oxlint@latest --fix --fix-suggestions",
+        "test:e2e": "playwright test"
+    },
+    "devDependencies": {
+        "@playwright/test": "^1.57.0",
+        "@tailwindcss/forms": "^0.5.11",
+        "@tailwindcss/typography": "^0.5.19",
+        "@tailwindcss/vite": "^4.1.18",
+        "@types/node": "^25.0.6",
+        "concurrently": "^9.2.1",
+        "glob": "^13.0.0",
+        "laravel-vite-plugin": "^2.0.1",
+        "oxfmt": "^0.24.0",
+        "tailwindcss": "^4.1.18",
+        "vite": "^7.3.1",
+        "vite-plugin-run": "^0.6.1"
+    },
+    "dependencies": {
+        "@hardimpactdev/craft-ui": "^0.0.7",
+        "@inertiajs/vue3": "^2.3.8",
+        "@nuxt/ui": "^4.3.0",
+        "@vitejs/plugin-vue": "^6.0.3",
+        "@vueuse/core": "^14.1.0",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "lucide-vue-next": "^0.562.0",
+        "nprogress": "^0.2.0",
+        "reka-ui": "^2.7.0",
+        "tailwind-merge": "^3.4.0",
+        "typescript": "^5.9.3",
+        "vue": "^3.5.26"
+    },
+    "optionalDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "4.55.1",
+        "@tailwindcss/oxide-linux-x64-gnu": "^4.1.18",
+        "lightningcss-linux-x64-gnu": "^1.30.2"
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "php",
+            "args": [
+                "./artisan",
+                "boost:mcp"
+            ]
+        },
+        "laravel-toolbar": {
+            "command": "php",
+            "args": [
+                "./artisan",
+                "toolbar:mcp"
+            ]
+        },
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "@anthropic-ai/mcp-playwright"
+            ]
+        }
+    }
+}
