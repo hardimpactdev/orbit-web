@@ -18,7 +18,7 @@
         "laravel/wayfinder": "^0.1.2",
         "saloonphp/saloon": "^3.14",
         "spatie/laravel-typescript-transformer": "^2.5",
-        "hardimpactdev/orbit-core": "@dev"
+        "hardimpactdev/orbit-core": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -102,11 +102,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../orbit-core"
-        }
-    ]
+    "prefer-stable": true
 }
