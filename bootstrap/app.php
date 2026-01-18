@@ -1,25 +1,24 @@
 <?php
 
-use App\Http\Middleware\GenerateAndSetCspNonce;
-use App\Http\Middleware\HandleInertiaRequests;
-use App\Support\Csp\AddCspHeaders;
+use HardImpact\Orbit\Http\Middleware\HandleInertiaRequests;
+use HardImpact\Orbit\Http\Middleware\ImplicitEnvironment;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
+        channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->trustProxies(at: '*');
-
         $middleware->web(append: [
-            GenerateAndSetCspNonce::class,
             HandleInertiaRequests::class,
-            AddCspHeaders::class,
+        ]);
+
+        $middleware->alias([
+            'implicit.environment' => ImplicitEnvironment::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
