@@ -1,13 +1,21 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "hardimpactdev/orbit-web",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Web dashboard for managing local development environments powered by Orbit CLI.",
     "keywords": [
+        "orbit",
         "laravel",
-        "framework"
+        "development",
+        "docker",
+        "dashboard"
     ],
     "license": "MIT",
+    "homepage": "https://github.com/hardimpactdev/orbit-web",
+    "support": {
+        "issues": "https://github.com/hardimpactdev/orbit-web/issues",
+        "source": "https://github.com/hardimpactdev/orbit-web"
+    },
     "require": {
         "php": "^8.4",
         "hardimpactdev/craft-laravel": "^0.1",
@@ -57,10 +65,6 @@
             "bun install",
             "bun run build"
         ],
-        "dev": [
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
-        ],
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
@@ -82,10 +86,6 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ],
-        "native:dev": [
-            "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -k -c \"#93c5fd,#c4b5fd,#fb7185\" \"php artisan native:serve --no-interaction\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names=app,queue,vite"
         ]
     },
     "extra": {

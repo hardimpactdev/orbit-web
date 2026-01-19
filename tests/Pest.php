@@ -15,6 +15,23 @@ pest()->extend(Tests\TestCase::class)
  // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 
+pest()->extend(Tests\TestCase::class)
+    ->in('Browser');
+
+/*
+|--------------------------------------------------------------------------
+| Browser Testing Configuration
+|--------------------------------------------------------------------------
+|
+| Configure Pest browser testing for orbit-web.ccc development instance.
+| Uses HTTPS with self-signed certificates.
+|
+*/
+
+pest()->browser()
+    ->withHost('orbit-web.ccc')
+    ->timeout(30000); // 30s timeout for slower operations
+
 /*
 |--------------------------------------------------------------------------
 | Expectations

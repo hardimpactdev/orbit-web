@@ -24,6 +24,7 @@ export default defineConfig({
         tailwindcss(),
     ],
     resolve: {
+        preserveSymlinks: true,
         alias: {
             '@': resolve(__dirname, 'vendor/hardimpactdev/orbit-core/resources/js'),
             '@orbit': resolve(__dirname, 'vendor/hardimpactdev/orbit-core/resources/js'),
