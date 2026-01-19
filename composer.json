@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "hardimpactdev/craft-laravel": "^0.1",
         "hardimpactdev/orbit-core": "dev-main",
         "inertiajs/inertia-laravel": "^2.0",
@@ -54,8 +54,8 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "bun install",
+            "bun run build"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
