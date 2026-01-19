@@ -34,11 +34,13 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_DATABASE', env('ORBIT_MODE') === 'cli'
+                ? ($_SERVER['HOME'] ?? $_SERVER['USERPROFILE'] ?? '') . '/.config/orbit/database.sqlite'
+                : database_path('database.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'busy_timeout' => null,
-            'journal_mode' => null,
+            'busy_timeout' => 30000,
+            'journal_mode' => 'WAL', // PRAGMA journal_mode = WAL
             'synchronous' => null,
         ],
 

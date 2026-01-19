@@ -16,5 +16,21 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register orbit-core routes
         OrbitServiceProvider::routes();
+
+        if (config('orbit.mode') === 'cli') {
+            $dbPath = config('database.connections.sqlite.database');
+            
+            if ($dbPath && ! str_contains($dbPath, ':memory:')) {
+                $dbDir = dirname($dbPath);
+
+                if (! is_dir($dbDir)) {
+                    @mkdir($dbDir, 0755, true);
+                }
+
+                if (! file_exists($dbPath)) {
+                    @touch($dbPath);
+                }
+            }
+        }
     }
 }
