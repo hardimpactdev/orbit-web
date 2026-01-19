@@ -89,6 +89,26 @@ composer update hardimpactdev/orbit-core
 - If you need to change functionality, update orbit-core instead
 - Always update orbit-core after making changes: `composer update hardimpactdev/orbit-core`
 
+## Local Deployment: orbit.ccc
+
+**CRITICAL**: `orbit.ccc` is served from `~/.config/orbit/web/`, NOT from this workspace.
+
+| Location | Purpose |
+|----------|---------|
+| This workspace | Development (editing code) |
+| `~/.config/orbit/web/` | **Live deployment** (what orbit.ccc serves) |
+
+When fixing frontend issues on `orbit.ccc`:
+
+```bash
+# Update and rebuild in the DEPLOYED location, not the workspace
+cd ~/.config/orbit/web
+composer update hardimpactdev/orbit-core
+bun run build
+```
+
+Building in this workspace will NOT affect `orbit.ccc`.
+
 ## Web Mode Behavior
 
 In web mode (`MULTI_ENVIRONMENT_MANAGEMENT=false`):
