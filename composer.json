@@ -11,14 +11,15 @@
     "require": {
         "php": "^8.2",
         "hardimpactdev/craft-laravel": "^0.1",
+        "hardimpactdev/orbit-core": "dev-main",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
+        "laravel/horizon": "^5.43",
         "laravel/reverb": "^1.7",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.2",
         "saloonphp/saloon": "^3.14",
-        "spatie/laravel-typescript-transformer": "^2.5",
-        "hardimpactdev/orbit-core": "dev-main"
+        "spatie/laravel-typescript-transformer": "^2.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
