@@ -89,25 +89,53 @@ composer update hardimpactdev/orbit-core
 - If you need to change functionality, update orbit-core instead
 - Always update orbit-core after making changes: `composer update hardimpactdev/orbit-core`
 
-## Local Deployment: orbit.ccc
+## Local Development Instances
 
-**CRITICAL**: `orbit.ccc` is served from `~/.config/orbit/web/`, NOT from this workspace.
+**CRITICAL**: There are TWO web instances. Always develop on `orbit-web.ccc`.
 
-| Location | Purpose |
-|----------|---------|
-| This workspace | Development (editing code) |
-| `~/.config/orbit/web/` | **Live deployment** (what orbit.ccc serves) |
+| URL | Serves From | Purpose |
+|-----|-------------|---------|
+| `orbit-web.ccc` | This workspace (`~/projects/orbit-web/`) | **Development** - Edit code here |
+| `orbit.ccc` | `~/.config/orbit/web/` | Bundled CLI instance (read-only) |
 
-When fixing frontend issues on `orbit.ccc`:
+### Development Workflow
 
 ```bash
-# Update and rebuild in the DEPLOYED location, not the workspace
-cd ~/.config/orbit/web
+# 1. Make changes in this workspace
+cd ~/projects/orbit-web  # or via symlink: ~/workspaces/orbit/orbit-web
+
+# 2. Update orbit-core if backend changes were made
 composer update hardimpactdev/orbit-core
+
+# 3. Rebuild frontend if needed
 bun run build
+
+# 4. Test on orbit-web.ccc
+# Ensure Horizon is running for async job processing
+
+# 5. Commit and push
+git add . && git commit -m "..." && git push
+
+# 6. Update bundled instance (for final verification only)
+cd ~/.config/orbit/web
+composer update hardimpactdev/orbit-core --no-cache
 ```
 
-Building in this workspace will NOT affect `orbit.ccc`.
+### Horizon Queue Workers
+
+For async site creation to work, Horizon must be running:
+
+```bash
+# Development instance (orbit-web.ccc)
+cd ~/projects/orbit-web && nohup php artisan horizon > /tmp/horizon-orbit-web.log 2>&1 &
+
+# Bundled instance (orbit.ccc) - usually already running
+cd ~/.config/orbit/web && nohup php artisan horizon > /tmp/horizon.log 2>&1 &
+```
+
+### Never Work Directly on orbit.ccc
+
+The bundled instance (`~/.config/orbit/web/`) should only be updated via `composer update`. All code changes must go through this workspace, be pushed to GitHub, and then pulled into consumers.
 
 ## Web Mode Behavior
 
