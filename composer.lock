@@ -1360,12 +1360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hardimpactdev/orbit-core.git",
-                "reference": "6a849122c4ff4ff71684fb01cabdafbff7e0708a"
+                "reference": "c09627d3182f28fe1433c4f3a81e5243b08761c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hardimpactdev/orbit-core/zipball/6a849122c4ff4ff71684fb01cabdafbff7e0708a",
-                "reference": "6a849122c4ff4ff71684fb01cabdafbff7e0708a",
+                "url": "https://api.github.com/repos/hardimpactdev/orbit-core/zipball/c09627d3182f28fe1433c4f3a81e5243b08761c7",
+                "reference": "c09627d3182f28fe1433c4f3a81e5243b08761c7",
                 "shasum": ""
             },
             "require": {
@@ -1425,7 +1425,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-19T10:35:38+00:00"
+            "time": "2026-01-19T13:59:58+00:00"
         },
         {
             "name": "inertiajs/inertia-laravel",
