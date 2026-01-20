@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**orbit-web** is a thin Laravel shell that provides a web dashboard for managing Orbit CLI installations. All business logic comes from the [orbit-core](https://github.com/hardimpactdev/orbit-core) package.
+**orbit-web** is a minimal Laravel shell that provides a web dashboard for managing Orbit CLI installations. Most business logic comes from the [orbit-core](https://github.com/hardimpactdev/orbit-core) package, with some local infrastructure (CSP, middleware, home page).
 
 ## Repository Locations
 
@@ -18,14 +18,31 @@
 ```
 orbit-web/
   app/
-    Models/User.php                  # Only local model
-    Providers/AppServiceProvider.php # Registers orbit-core routes
+    Models/User.php                    # Only local model
+    Providers/
+      AppServiceProvider.php           # Registers orbit-core routes
+      HorizonServiceProvider.php       # Horizon configuration
+      ToolbarConfigProvider.php        # Dev toolbar config
+    Http/
+      Controllers/
+        HomeController.php             # Local home page
+      Middleware/
+        HandleInertiaRequests.php      # Local Inertia middleware
+        GenerateAndSetCspNonce.php     # CSP nonce generation
+    Support/
+      Csp/                             # Content Security Policy
   config/
-    orbit.php                        # Mode configuration
+    orbit.php                          # Mode configuration
+    csp.php                            # CSP settings
+    horizon.php                        # Horizon config
+    reverb.php                         # WebSocket config
   resources/
-    views/app.blade.php              # Blade template
-  vite.config.ts                     # Compiles assets from orbit-core
-  composer.json                      # Requires hardimpactdev/orbit-core
+    views/app.blade.php                # Blade template
+    js/
+      pages/Home.vue                   # Local home page component
+      components/AppLogoIcon.vue       # Local logo component
+  vite.config.ts                       # Compiles assets from orbit-core
+  composer.json                        # Requires hardimpactdev/orbit-core
 ```
 
 ## Key Configuration
@@ -34,7 +51,9 @@ orbit-web/
 
 ```env
 ORBIT_MODE=web
-MULTI_ENVIRONMENT_MANAGEMENT=false
+# MULTI_ENVIRONMENT_MANAGEMENT defaults to true when ORBIT_MODE is not 'cli'
+# Set to false explicitly if single-environment mode is desired
+MULTI_ENVIRONMENT_MANAGEMENT=true
 ```
 
 ### Route Registration
@@ -52,14 +71,22 @@ public function boot(): void
 
 ### Vite Configuration
 
-Assets are compiled from orbit-core:
+Assets are compiled from orbit-core using laravel-vite-plugin:
 
 ```typescript
-build: {
-    rollupOptions: {
-        input: "vendor/hardimpactdev/orbit-core/resources/js/app.ts",
-    },
-}
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'vendor/hardimpactdev/orbit-core/resources/js/app.ts',
+                'vendor/hardimpactdev/orbit-core/resources/css/app.css',
+            ],
+            // ...
+        }),
+    ],
+});
 ```
 
 ## Development Commands
@@ -84,9 +111,10 @@ composer update hardimpactdev/orbit-core
 
 ## Important Notes
 
-- This is a **thin shell** - do NOT add business logic here
-- All controllers, services, models (except User) come from orbit-core
-- If you need to change functionality, update orbit-core instead
+- This is a **minimal shell** - avoid adding business logic here when possible
+- Most controllers, services, models (except User) come from orbit-core
+- Local exceptions: HomeController, CSP middleware, Horizon/Toolbar providers
+- If you need to change core functionality, update orbit-core instead
 - Always update orbit-core after making changes: `composer update hardimpactdev/orbit-core`
 
 ## Local Development Instances
