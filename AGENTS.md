@@ -1,194 +1,125 @@
-# Agent Instructions
+# orbit-web
 
-## Project Overview
+Empty Laravel 12 shell for orbit-core. All UI, routes, and assets come from the package.
 
-**orbit-web** is a minimal Laravel shell that provides a web dashboard for managing Orbit CLI installations. Most business logic comes from the [orbit-core](https://github.com/hardimpactdev/orbit-core) package, with some local infrastructure (CSP, middleware, home page).
+## Architecture
 
-## Repository Locations
-
-| Project | Location | Purpose |
-|---------|----------|---------|
-| orbit-core | `~/projects/orbit-core` (remote) | Shared Laravel package |
-| orbit-web | `~/projects/orbit-web` (remote) | Web dashboard shell |
-| orbit-desktop | Local Mac | NativePHP desktop shell |
-| orbit-cli | `~/projects/orbit-cli` (remote) | CLI tool |
-
-## Project Structure
+orbit-web is intentionally minimal - just Laravel boilerplate + `composer require orbit-core`.
 
 ```
 orbit-web/
-  app/
-    Models/User.php                    # Only local model
-    Providers/
-      AppServiceProvider.php           # Registers orbit-core routes
-      HorizonServiceProvider.php       # Horizon configuration
-      ToolbarConfigProvider.php        # Dev toolbar config
-    Http/
-      Controllers/
-        HomeController.php             # Local home page
-      Middleware/
-        HandleInertiaRequests.php      # Local Inertia middleware
-        GenerateAndSetCspNonce.php     # CSP nonce generation
-    Support/
-      Csp/                             # Content Security Policy
-  config/
-    orbit.php                          # Mode configuration
-    csp.php                            # CSP settings
-    horizon.php                        # Horizon config
-    reverb.php                         # WebSocket config
-  resources/
-    views/app.blade.php                # Blade template
-    js/
-      pages/Home.vue                   # Local home page component
-      components/AppLogoIcon.vue       # Local logo component
-  vite.config.ts                       # Compiles assets from orbit-core
-  composer.json                        # Requires hardimpactdev/orbit-core
+├── app/Providers/
+│   ├── AppServiceProvider.php     ← calls OrbitServiceProvider::routes()
+│   └── HorizonServiceProvider.php
+├── bootstrap/
+│   └── app.php                    ← registers HandleInertiaRequests middleware
+├── config/
+├── database/
+├── public/
+│   └── vendor/orbit/build/        ← published assets (production)
+├── routes/
+│   └── web.php                    ← empty (orbit-core provides routes)
+├── .env
+└── composer.json
 ```
 
-## Key Configuration
+**No frontend files** - no `resources/js`, `resources/css`, `resources/views`, `vite.config.js`, `package.json`.
 
-### Web Mode Settings
+## How It Works
 
-```env
-ORBIT_MODE=web
-# MULTI_ENVIRONMENT_MANAGEMENT defaults to true when ORBIT_MODE is not 'cli'
-# Set to false explicitly if single-environment mode is desired
-MULTI_ENVIRONMENT_MANAGEMENT=true
-```
+1. **Routes**: `OrbitServiceProvider::routes()` registers all routes from orbit-core
+2. **Views**: orbit-core provides `resources/views/app.blade.php` via `loadViewsFrom()`
+3. **Assets**: In dev, Vite serves from orbit-core's dev server. In prod, published to `public/vendor/orbit/build/`
+4. **Middleware**: `HandleInertiaRequests` comes from orbit-core
 
-### Route Registration
+## Development
 
-Routes are registered in `AppServiceProvider`:
-
-```php
-use HardImpact\Orbit\OrbitServiceProvider;
-
-public function boot(): void
-{
-    OrbitServiceProvider::routes();
-}
-```
-
-### Vite Configuration
-
-Assets are compiled from orbit-core using laravel-vite-plugin:
-
-```typescript
-import laravel from 'laravel-vite-plugin';
-
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: [
-                'vendor/hardimpactdev/orbit-core/resources/js/app.ts',
-                'vendor/hardimpactdev/orbit-core/resources/css/app.css',
-            ],
-            // ...
-        }),
-    ],
-});
-```
-
-## Development Commands
+**You don't develop here.** All UI development happens in orbit-core.
 
 ```bash
-# Install dependencies
-composer install
-bun install
-
-# Run development server
+# Start dev server in orbit-core
+cd ~/projects/orbit-core
 bun run dev
 
-# Build for production
+# View in browser
+open https://orbit-web.ccc
+```
+
+HMR works because orbit-core's service provider configures `Vite::useHotFile()` to point to the package's hot file.
+
+## Production
+
+```bash
+# Build assets in orbit-core
+cd ~/projects/orbit-core
 bun run build
 
-# Run tests
-php artisan test
+# Publish to this shell
+cd ~/projects/orbit-web
+php artisan vendor:publish --tag=orbit-assets --force
+```
 
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `app/Providers/AppServiceProvider.php` | Calls `OrbitServiceProvider::routes()` |
+| `bootstrap/app.php` | Registers `HandleInertiaRequests` middleware |
+| `config/orbit.php` | Published orbit-core config |
+| `.env` | Environment config (ORBIT_MODE, ORBIT_CLI_PATH, etc.) |
+
+## Commands
+
+```bash
 # Update orbit-core
 composer update hardimpactdev/orbit-core
+
+# Publish config
+php artisan vendor:publish --tag=orbit-config
+
+# Publish assets (production)
+php artisan vendor:publish --tag=orbit-assets --force
+
+# Run Horizon
+php artisan horizon
 ```
 
-## Important Notes
+## Environment Variables
 
-- This is a **minimal shell** - avoid adding business logic here when possible
-- Most controllers, services, models (except User) come from orbit-core
-- Local exceptions: HomeController, CSP middleware, Horizon/Toolbar providers
-- If you need to change core functionality, update orbit-core instead
-- Always update orbit-core after making changes: `composer update hardimpactdev/orbit-core`
+Key orbit-specific variables in `.env`:
 
-## Local Development Instances
+```
+ORBIT_MODE=web
+ORBIT_CLI_PATH=/home/nckrtl/projects/orbit-cli/orbit  # Path to orbit CLI executable
+DB_DATABASE=/home/nckrtl/.config/orbit/database.sqlite  # Shared with CLI
+VITE_REVERB_HOST=reverb.ccc
+```
 
-**CRITICAL**: There are TWO web instances. Always develop on `orbit-web.ccc`.
+For development:
+- `ORBIT_CLI_PATH` points to the orbit-cli project (changes take effect immediately)
+- `DB_DATABASE` points to the CLI's database (shared data)
 
-| URL | Serves From | Purpose |
-|-----|-------------|---------|
-| `orbit-web.ccc` | This workspace (`~/projects/orbit-web/`) | **Development** - Edit code here |
-| `orbit.ccc` | `~/.config/orbit/web/` | Bundled CLI instance (read-only) |
+## Database Migrations
 
-### Development Workflow
+**orbit-web is the migration runner for development.** Run migrations here to update the shared database:
 
 ```bash
-# 1. Make changes in this workspace
-cd ~/projects/orbit-web  # or via symlink: ~/workspaces/orbit/orbit-web
-
-# 2. Update orbit-core if backend changes were made
-composer update hardimpactdev/orbit-core
-
-# 3. Rebuild frontend if needed
-bun run build
-
-# 4. Test on orbit-web.ccc
-# Ensure Horizon is running for async job processing
-
-# 5. Commit and push
-git add . && git commit -m "..." && git push
-
-# 6. Update bundled instance (for final verification only)
-cd ~/.config/orbit/web
-composer update hardimpactdev/orbit-core --no-cache
+cd ~/projects/orbit-web
+php artisan migrate
 ```
 
-### Horizon Queue Workers
-
-For async site creation to work, Horizon must be running:
-
-```bash
-# Development instance (orbit-web.ccc)
-cd ~/projects/orbit-web && nohup php artisan horizon > /tmp/horizon-orbit-web.log 2>&1 &
-
-# Bundled instance (orbit.ccc) - usually already running
-cd ~/.config/orbit/web && nohup php artisan horizon > /tmp/horizon.log 2>&1 &
-```
-
-### Never Work Directly on orbit.ccc
-
-The bundled instance (`~/.config/orbit/web/`) should only be updated via `composer update`. All code changes must go through this workspace, be pushed to GitHub, and then pulled into consumers.
-
-## Web Mode Behavior
-
-In web mode (`MULTI_ENVIRONMENT_MANAGEMENT=false`):
-- Routes are flat: `/projects`, `/services`, etc.
-- `ImplicitEnvironment` middleware injects the local environment
-- Environment switcher UI is hidden
-- SSH key management returns 403
+This runs orbit-core's migrations against the shared CLI database.
 
 ## Testing
 
+Tests live in orbit-core. This shell only needs basic smoke tests.
+
 ```bash
-# Run all tests
 php artisan test
-
-# Run architecture tests
-php artisan test tests/Feature/ArchitectureTest.php
 ```
 
-## After orbit-core Updates
+## Related Projects
 
-When orbit-core is updated:
-
-```bash
-composer update hardimpactdev/orbit-core
-bun run build
-php artisan migrate  # If new migrations
-```
+- **orbit-core**: The actual product - all UI, routes, controllers, assets
+- **orbit-cli**: CLI tool that bundles orbit-web
+- **orbit-desktop**: NativePHP shell (also uses orbit-core)
