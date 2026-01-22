@@ -21,5 +21,15 @@ return [
     | When false, uses implicit environment injection via middleware.
     |
     */
-    'multi_environment_management' => env('ORBIT_MODE') !== 'cli' && env('MULTI_ENVIRONMENT_MANAGEMENT', true),
+    'multi_environment' => env('MULTI_ENVIRONMENT_MANAGEMENT', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database Path
+    |--------------------------------------------------------------------------
+    |
+    | The path to the SQLite database file when running in CLI mode.
+    |
+    */
+    'database' => ['path' => env('ORBIT_DATABASE_PATH')],
 ];

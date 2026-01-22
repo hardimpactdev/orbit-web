@@ -1,9 +1,0 @@
-@import 'tailwindcss';
-@import '../../node_modules/@hardimpactdev/craft-ui/dist/craft-ui.css';
-@import './theme.css';
-@import './nprogress.css';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
