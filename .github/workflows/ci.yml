@@ -40,6 +40,8 @@ jobs:
           cp .env.example .env
           php artisan key:generate
           touch database/database.sqlite
+          # Override DB path for CI (env.example has placeholder path)
+          sed -i 's|DB_DATABASE=.*|DB_DATABASE='"$GITHUB_WORKSPACE"'/database/database.sqlite|' .env
 
       - name: Run migrations
         run: php artisan migrate --force
