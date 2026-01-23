@@ -1235,7 +1235,7 @@
             "dist": {
                 "type": "path",
                 "url": "../orbit-core",
-                "reference": "adbe37e2a4deed43ba55efda5f48c41793089944"
+                "reference": "6f5e9dede810f36d41db7ae35fa7c9b9448adf38"
             },
             "require": {
                 "illuminate/contracts": "^11.0||^12.0",
@@ -1307,7 +1307,7 @@
             "dist": {
                 "type": "path",
                 "url": "../orbit-ui",
-                "reference": "8cf318b53c686efb15a36b87cd7b808bd16b687d"
+                "reference": "2c5b80e0c7d64a58d1bee8d014d22818c4a32e98"
             },
             "require": {
                 "hardimpactdev/orbit-core": "^0.1.0 || @dev",
