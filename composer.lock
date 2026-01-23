@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1523e51d64b6f6ee0a0f4e4163a43a1",
+    "content-hash": "dc603373bb76c230af66b535a51ff661",
     "packages": [
         {
             "name": "brick/math",
@@ -1232,22 +1232,14 @@
         {
             "name": "hardimpactdev/orbit-core",
             "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hardimpactdev/orbit-core.git",
-                "reference": "e03cda44bca57d6e87fb8178aed287bdb44d2dc7"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hardimpactdev/orbit-core/zipball/e03cda44bca57d6e87fb8178aed287bdb44d2dc7",
-                "reference": "e03cda44bca57d6e87fb8178aed287bdb44d2dc7",
-                "shasum": ""
+                "type": "path",
+                "url": "../orbit-core",
+                "reference": "adbe37e2a4deed43ba55efda5f48c41793089944"
             },
             "require": {
                 "illuminate/contracts": "^11.0||^12.0",
                 "illuminate/support": "^11.0||^12.0",
-                "inertiajs/inertia-laravel": "^2.0",
-                "laravel/mcp": "^0.5.2",
                 "php": "^8.3",
                 "saloonphp/saloon": "^3.14"
             },
@@ -1258,22 +1250,36 @@
                 "pestphp/pest": "^4.0",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "HardImpact\\Orbit\\OrbitServiceProvider"
+                        "HardImpact\\Orbit\\Core\\CoreServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "HardImpact\\Orbit\\": "src/",
-                    "HardImpact\\Orbit\\Database\\Factories\\": "database/factories/"
+                    "HardImpact\\Orbit\\Core\\": "src/",
+                    "HardImpact\\Orbit\\Core\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "HardImpact\\Orbit\\Core\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1291,17 +1297,101 @@
                 "laravel",
                 "orbit"
             ],
-            "support": {
-                "issues": "https://github.com/hardimpactdev/orbit-core/issues",
-                "source": "https://github.com/hardimpactdev/orbit-core/tree/main"
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "hardimpactdev/orbit-ui",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../orbit-ui",
+                "reference": "8cf318b53c686efb15a36b87cd7b808bd16b687d"
             },
-            "funding": [
+            "require": {
+                "hardimpactdev/orbit-core": "^0.1.0 || @dev",
+                "illuminate/contracts": "^11.0||^12.0",
+                "inertiajs/inertia-laravel": "^2.0",
+                "laravel/mcp": "^0.5.2",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^10.0.0||^9.0.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "spatie/laravel-ray": "^1.35"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "HardImpact\\Orbit\\Ui\\UiServiceProvider"
+                    ],
+                    "aliases": {
+                        "Ui": "HardImpact\\Orbit\\Ui\\Facades\\Ui"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "HardImpact\\Orbit\\Ui\\": "src/",
+                    "HardImpact\\Orbit\\Ui\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "HardImpact\\Orbit\\Ui\\Tests\\": "tests/",
+                    "Workbench\\App\\": "workbench/app/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@composer run prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
                 {
-                    "url": "https://github.com/Hard Impact",
-                    "type": "github"
+                    "name": "Nick Ratel",
+                    "email": "nick@hardimpact.dev",
+                    "role": "Developer"
                 }
             ],
-            "time": "2026-01-23T19:46:43+00:00"
+            "description": "Web UI for Orbit",
+            "homepage": "https://github.com/hardimpactdev/orbit-ui",
+            "keywords": [
+                "hardimpactdev",
+                "laravel",
+                "orbit-ui"
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "inertiajs/inertia-laravel",
@@ -2206,16 +2296,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.30.2",
+            "version": "3.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277"
+                "reference": "1717e0b3642b0df65ecb0cc89cdd99fa840672ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277",
-                "reference": "5966a8ba23e62bdb518dd9e0e665c2dbd4b5b277",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1717e0b3642b0df65ecb0cc89cdd99fa840672ff",
+                "reference": "1717e0b3642b0df65ecb0cc89cdd99fa840672ff",
                 "shasum": ""
             },
             "require": {
@@ -2283,22 +2373,22 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.30.2"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.31.0"
             },
-            "time": "2025-11-10T17:13:11+00:00"
+            "time": "2026-01-23T15:38:47+00:00"
         },
         {
             "name": "league/flysystem-local",
-            "version": "3.30.2",
+            "version": "3.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-local.git",
-                "reference": "ab4f9d0d672f601b102936aa728801dd1a11968d"
+                "reference": "2f669db18a4c20c755c2bb7d3a7b0b2340488079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-local/zipball/ab4f9d0d672f601b102936aa728801dd1a11968d",
-                "reference": "ab4f9d0d672f601b102936aa728801dd1a11968d",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-local/zipball/2f669db18a4c20c755c2bb7d3a7b0b2340488079",
+                "reference": "2f669db18a4c20c755c2bb7d3a7b0b2340488079",
                 "shasum": ""
             },
             "require": {
@@ -2332,9 +2422,9 @@
                 "local"
             ],
             "support": {
-                "source": "https://github.com/thephpleague/flysystem-local/tree/3.30.2"
+                "source": "https://github.com/thephpleague/flysystem-local/tree/3.31.0"
             },
-            "time": "2025-11-10T11:23:37+00:00"
+            "time": "2026-01-23T15:30:45+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -10579,7 +10669,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "hardimpactdev/orbit-core": 20
+        "hardimpactdev/orbit-ui": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
